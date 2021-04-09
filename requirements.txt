@@ -1,1 +1,2 @@
 apache-beam==2.26.0
+xmltodict==0.12.0
