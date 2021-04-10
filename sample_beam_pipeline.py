@@ -10,12 +10,10 @@ from transformers.xml_file_transformer import StackOverflowDataTransform
 
 
 def run(options):
-
     with beam.Pipeline(options=options) as p:
         (p
-         | 'Create PCollection' >> beam.Create([p.options.input])
-         | 'Transform file data' >> StackOverflowDataTransform()
-         # | 'Print' >> beam.Map(print)
+         | 'Read File' >> beam.io.ReadFromText(p.options.input)
+         | 'Transformation' >> StackOverflowDataTransform()
          | 'Write to file' >> beam.io.WriteToText(
                     p.options.output,
                     file_name_suffix=".csv",
