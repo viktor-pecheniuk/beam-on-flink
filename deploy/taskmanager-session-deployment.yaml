@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: flink-taskmanager
 spec:
-  replicas: 2
+  replicas: 5
   selector:
     matchLabels:
       app: flink
@@ -19,6 +19,10 @@ spec:
         image: apache/flink:1.10.3
         # image: apache/flink:1.12.0-scala_2.11
         args: ["taskmanager"]
+        resources:
+          limits:
+            memory: "3.75Gi"
+            cpu: "1"
         ports:
         - containerPort: 6122
           name: rpc
@@ -45,6 +49,9 @@ spec:
             port: 50000
           initialDelaySeconds: 30
           periodSeconds: 60
+        volumeMounts:
+          - name: pvc-cce-obs-jobdata
+            mountPath: /tmp/datafile
       volumes:
       - name: flink-config-volume
         configMap:
@@ -54,3 +61,6 @@ spec:
             path: flink-conf.yaml
           - key: log4j-console.properties
             path: log4j-console.properties
+      - name: pvc-cce-obs-jobdata
+        persistentVolumeClaim:
+          claimName: pvc-cce-obs-jobdata-storage

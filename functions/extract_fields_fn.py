@@ -3,7 +3,7 @@ from datetime import datetime
 import apache_beam as beam
 
 
-class ExtractFields(beam.DoFn):
+class ExtractFieldsFn(beam.DoFn):
 
     def process(self, element):
         fields = element.get("row")

@@ -12,7 +12,8 @@ from transformers.xml_file_transformer import StackOverflowDataTransform
 def run(options):
     with beam.Pipeline(options=options) as p:
         (p
-         | 'Read File' >> beam.io.ReadFromText(p.options.input)
+         | 'Read File' >> beam.io.ReadFromText(p.options.input, validate=False)
+         | 're-shuffling' >> beam.Reshuffle()
          | 'Transformation' >> StackOverflowDataTransform()
          | 'Write to file' >> beam.io.WriteToText(
                     p.options.output,
