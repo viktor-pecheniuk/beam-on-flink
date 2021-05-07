@@ -6,15 +6,15 @@ import apache_beam as beam
 from options.common_options import CommonOptions
 from options.dataflow_runner_options import DataflowRunnerOptions
 from options.flink_runner_options import FlinkRunnerOptions
-from transformers.xml_file_transformer import StackOverflowDataTransform
+from transformers.avro_file_transformer import StackOverflowAvroDataTransform
 
 
 def run(options):
     with beam.Pipeline(options=options) as p:
         (p
-         | 'Read File' >> beam.io.ReadFromText(p.options.input, validate=False)
+         | 'Read Avro' >> beam.io.ReadFromAvro(p.options.input, validate=False)
          | 're-shuffling' >> beam.Reshuffle()
-         | 'Transformation' >> StackOverflowDataTransform()
+         | 'Transformation' >> StackOverflowAvroDataTransform()
          | 'Write to file' >> beam.io.WriteToText(
                     p.options.output,
                     file_name_suffix=".csv",
