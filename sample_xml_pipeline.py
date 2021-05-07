@@ -12,7 +12,7 @@ from transformers.xml_file_transformer import StackOverflowXmlDataTransform
 def run(options):
     with beam.Pipeline(options=options) as p:
         (p
-         | 'Read File' >> beam.io.iobase.SDFBoundedSourceReader()
+         | 'Read File' >> beam.io.ReadFromText(p.options.input, validate=False)
          # put this on portable runners
          # | 're-shuffling' >> beam.Reshuffle()
          | 'Transformation' >> StackOverflowXmlDataTransform()
